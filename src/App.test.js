@@ -88,7 +88,7 @@ test("7) confirm password should match password", () => {
     screen.getByLabelText(/confirm password/i);
   const submitButtonElement = screen.getByRole("button", { name: /submit/i });
 
-  //actions
+  //actions - make PW not match
   userEvent.type(emailInputElement, "selena@gmail.com");
   userEvent.type(passwordInputElement, "swordfish");
   userEvent.type(confirmPasswordInputElement, "sword");
@@ -96,7 +96,16 @@ test("7) confirm password should match password", () => {
 
   const passwordsMatchError = screen.queryByText(/the passwords don\'t match - try again/i)
 
-  //assertions
+  //assertions - PW not matching
   expect(passwordsMatchError).toBeInTheDocument
   expect(confirmPasswordInputElement.value).not.toEqual(passwordInputElement.value);
+
+  //actions - make PW match
+  userEvent.clear(confirmPasswordInputElement)
+  userEvent.type(confirmPasswordInputElement, "swordfish")
+
+  //assertions - PW matching
+  expect(passwordsMatchError).not.toBeInTheDocument
+  expect(confirmPasswordInputElement.value).toEqual(passwordInputElement.value);
+
 });
