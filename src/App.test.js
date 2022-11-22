@@ -2,10 +2,6 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
 
-//a function that is invoked before each test
-beforeEach(() => {
-  render(<App />);
-});
 
 //after each - good for cleanup
 afterEach(() => {});
@@ -45,6 +41,10 @@ const submitForm = () => {
 };
 
 describe("App tests", () => {
+//a function that is invoked before each test - its in the outer describe block so affects all tests
+beforeEach(() => {
+  render(<App />);
+});
   describe("Basic Inputs", () => {
     test("1) inputs should be initially empty", () => {
       const emailInputElement = screen.getByRole("textbox", { name: /email/i });
@@ -83,6 +83,10 @@ describe("App tests", () => {
     });
   });
   describe("Error Handling", () => {
+    //because this beforeEach is only in my Error handling describe block, it only runs before each test in that describe block
+    beforeEach(() => {
+      console.log('before each error handle test')
+    })
     test("5) should show email error message on invalid email", () => {
       //first time we call this element, its null as we haven't submitted invalid yet
       expect(screen.queryByText(/the email you input is invalid/i)).not
