@@ -94,18 +94,52 @@ test("7) confirm password should match password", () => {
   userEvent.type(confirmPasswordInputElement, "sword");
   userEvent.click(submitButtonElement);
 
-  const passwordsMatchError = screen.queryByText(/the passwords don\'t match - try again/i)
+  const passwordsMatchError = screen.queryByText(
+    /the passwords don\'t match - try again/i
+  );
 
   //assertions - PW not matching
-  expect(passwordsMatchError).toBeInTheDocument
-  expect(confirmPasswordInputElement.value).not.toEqual(passwordInputElement.value);
+  expect(passwordsMatchError).toBeInTheDocument;
+  expect(confirmPasswordInputElement.value).not.toEqual(
+    passwordInputElement.value
+  );
 
   //actions - make PW match
-  userEvent.clear(confirmPasswordInputElement)
-  userEvent.type(confirmPasswordInputElement, "swordfish")
+  userEvent.clear(confirmPasswordInputElement);
+  userEvent.type(confirmPasswordInputElement, "swordfish");
 
   //assertions - PW matching
-  expect(passwordsMatchError).not.toBeInTheDocument
+  expect(passwordsMatchError).not.toBeInTheDocument;
   expect(confirmPasswordInputElement.value).toEqual(passwordInputElement.value);
+});
 
+test("8) no error messages on all valid inputs", () => {
+  //this is the "happy path" test - asserting no errors when everything done right
+  render(<App />);
+  const emailInputElement = screen.getByRole("textbox", { name: /email/i });
+  const passwordInputElement = screen.getByLabelText("Password");
+  const confirmPasswordInputElement =
+    screen.getByLabelText(/confirm password/i);
+  const submitButtonElement = screen.getByRole("button", { name: /submit/i });
+
+  userEvent.type(emailInputElement, "selena@gmail.com");
+  userEvent.type(passwordInputElement, "swordfish");
+  userEvent.type(confirmPasswordInputElement, "swordfish");
+  userEvent.click(submitButtonElement);
+
+  const emailErrorElement = screen.queryByText(
+    /the email you input is invalid/i
+  );
+
+  const passwordErrorElement = screen.queryByText(
+    /the password you entered should contain 5 or more characters/i
+  );
+
+  const passwordsMatchError = screen.queryByText(
+    /the passwords don\'t match - try again/i
+  );
+
+  expect(emailErrorElement).not.toBeInTheDocument;
+  expect(passwordErrorElement).not.toBeInTheDocument;
+  expect(passwordsMatchError).not.toBeInTheDocument;
 });
