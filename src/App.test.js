@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
 
-test("inputs should be initially empty", () => {
+test("1) inputs should be initially empty", () => {
   render(<App />);
   const emailInputElement = screen.getByRole("textbox", { name: /email/i });
   const passwordInputElement = screen.getByLabelText("Password");
@@ -13,21 +13,21 @@ test("inputs should be initially empty", () => {
   expect(confirmPasswordInputElement.value).toBe("");
 });
 
-test("should be able to type an email", () => {
+test("2) should be able to type an email", () => {
   render(<App />);
   const emailInputElement = screen.getByRole("textbox", { name: /email/i });
   userEvent.type(emailInputElement, "selena@gmail.com");
   expect(emailInputElement.value).toBe("selena@gmail.com");
 });
 
-test("should be able to type a password", () => {
+test("3) should be able to type a password", () => {
   render(<App />);
   const passwordInputElement = screen.getByLabelText("Password");
   userEvent.type(passwordInputElement, "swordfish");
   expect(passwordInputElement.value).toBe("swordfish");
 });
 
-test("should be able to type a confirmation password", () => {
+test("4) should be able to type a confirmation password", () => {
   render(<App />);
   const confirmPasswordInputElement =
     screen.getByLabelText(/confirm password/i);
@@ -35,7 +35,7 @@ test("should be able to type a confirmation password", () => {
   expect(confirmPasswordInputElement.value).toBe("swordfish");
 });
 
-test("should show email error message on invalid email", () => {
+test("5) should show email error message on invalid email", () => {
   render(<App />);
   const emailInputElement = screen.getByRole("textbox", { name: /email/i });
   const submitButtonElement = screen.getByRole("button", { name: /submit/i });
@@ -54,7 +54,7 @@ test("should show email error message on invalid email", () => {
   expect(emailErrorElementAgain).toBeInTheDocument();
 });
 
-test("should show password error if password is less than 5 characters", () => {
+test("6) should show password error if password is less than 5 characters", () => {
   //setup - render App, get value of elements 'appear' before inputs
   render(<App />);
   const emailInputElement = screen.getByRole("textbox", { name: /email/i });
@@ -79,7 +79,7 @@ test("should show password error if password is less than 5 characters", () => {
   expect(passwordErrorElement).toBeInTheDocument();
 });
 
-test("confirm password should match password", () => {
+test("7) confirm password should match password", () => {
   //setup
   render(<App />);
   const emailInputElement = screen.getByRole("textbox", { name: /email/i });
