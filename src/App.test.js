@@ -2,18 +2,6 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
 
-// test('renders learn react link', () => {
-//   //1) Rendering the component that we want to test
-//   render(<App />);
-
-//   //2)Finding a specific element within the component
-//   //Using the screen.getByText method with a Regular Expression
-//   const linkElement = screen.getByText(/learn react/i);
-
-//   //3) Assertion - expect(ourElement).toBeSomething
-//   expect(linkElement).toBeInTheDocument();
-// });
-
 test("inputs should be initially empty", () => {
   render(<App />);
   const emailInputElement = screen.getByRole("textbox", { name: /email/i });
@@ -103,9 +91,12 @@ test("confirm password should match password", () => {
   //actions
   userEvent.type(emailInputElement, "selena@gmail.com");
   userEvent.type(passwordInputElement, "swordfish");
-  userEvent.type(confirmPasswordInputElement, "swordfish");
+  userEvent.type(confirmPasswordInputElement, "sword");
   userEvent.click(submitButtonElement);
 
+  const passwordsMatchError = screen.queryByText(/the passwords don\'t match - try again/i)
+
   //assertions
-  expect(confirmPasswordInputElement.value).toEqual(passwordInputElement.value);
+  expect(passwordsMatchError).toBeInTheDocument
+  expect(confirmPasswordInputElement.value).not.toEqual(passwordInputElement.value);
 });
